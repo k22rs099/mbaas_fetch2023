@@ -14,7 +14,9 @@
         let ncmb = new NCMB(appKey, clientKey);
         // 利用するデータベースを指定（存在しなければ生成）
         let TestClass = ncmb.DataStore("FetchTest");
-        TestClass.fetch().then(function(results){var dataa=results.get("text");})
+        TestClass.fetchAll().then(function(results) {
+            var dataa = results[0].get("text");
+        })
 
         function register() {
             // 登録するレコードを用意
@@ -32,14 +34,28 @@
                     $("#message").html("Failed to create new object, with error code: " + JSON.stringify(err));
                 })
         }
-        function fetch(){
+
+        function fetch() {
             let TestClass = ncmb.DataStore("FetchTest");
-            TestClass.fetch().then(function(results){
-                let data=results.get("text");
-                let update=results.get("updateDate");
+            TestClass.fetch().then(function(results) {
+                let data = results.get("text");
+                let update = results.get("updateDate");
                 $("#message").html(data + ":" + update);
             })
         }
+
+        function fetchAll() {
+            let TestClass = ncmb.DataStore("FetchTest");
+            TestClass.fetchAll().then(function(results) {
+                let msg = "";
+                for (var i = 0; i < results.length; i++) {
+                    var data = results[i].get("text");
+                    var update = results[i].get("updateDate");
+                    msg += data + ":" + update;
+                }
+                $("#message").html(msg);
+                })
+            }
     </script>
 </head>
 
@@ -52,7 +68,7 @@
     <div id="button">
         <button id="btnA" class="btn" onclick="register()">Register</button>
         <button id="btnB" class="btn" onclick="fetch()">Fetch</button>
-        <button id="btnC" class="btn" onclick="fetchall()">Fetch All</button>
+        <button id="btnC" class="btn" onclick="fetchAll()">Fetch All</button>
     </div>
     <div id="message">message area</div>
 </body>
